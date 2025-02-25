@@ -1,0 +1,1 @@
+images folder is made to save the images you added before
