@@ -13,4 +13,14 @@ const photoSchema = new mongoose.Schema({
     title: String
 })
 
-export const Photo = mongoose.model("Photo", photoSchema);
+export const Photo = mongoose.model<PhotoDocument>("Photo", photoSchema);
+
+
+export const addPhoto = async (photo: PhotoDocument) => {
+    try {
+        let newPhoto = new Photo(photo); 
+        await newPhoto.save();
+    } catch (error) {
+        throw error;
+    }
+};

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Photo } from '../models/photo.model';
+import { addPhoto, Photo } from '../models/photo.model';
 import multer from 'multer';
 
 const router = Router();
@@ -18,11 +18,26 @@ router.get('/', async (req, res, next) => {
 
 router.post(
     '/',
-    /** @TODO Add multer middleware */
+    multer({
+        storage: multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, "images");
+            },
+            filename: (req, file, cb) => {
+                cb(null, Date.now() + "-" + file.originalname);
+            }
+        })
+    }).single("file"),
     async (req, res, next) => {
         try {
-
-            /** @TODO Save Photo in database */
+            console.log(req.file)
+            
+            const photoData = new Photo({   
+                path: req.file?.path || "", 
+                title: req.body.title || "Untitled"
+            });
+            
+            await addPhoto(photoData);
             res.redirect('/');
 
         } catch (err) {
